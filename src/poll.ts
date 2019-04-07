@@ -49,7 +49,7 @@ async function logData() {
       chalk.yellow(slrLvl.toString()),
       power ? chalk.bgGreen(" LIGHTS ON ") : chalk.gray("off"),
     )
-    db.logData(date, false, batLvl, slrLvl, power)
+    db.logData(date, true, batLvl, slrLvl, power)
   } catch (e) {
     // Asleep
     console.log(chalk.gray(date.toLocaleString()))
