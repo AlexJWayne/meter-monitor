@@ -51,14 +51,10 @@ async function logData() {
     )
     db.logData(date, false, batLvl, slrLvl, power)
   } catch (e) {
-    // Not awake
+    // Asleep
     console.log(chalk.gray(date.toLocaleString()))
     db.logData(date, false)
   }
-
-  fs.appendFile("./data.tsv", data + "\n", err => {
-    if (err) throw err
-  })
 }
 
 export default async function poll() {
