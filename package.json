@@ -1,0 +1,23 @@
+{
+  "name": "meter-monitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chalk": "^2.2.0",
+    "chalk": "^2.4.2",
+    "dotenv": "^7.0.0",
+    "particle-api-js": "^7.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.0",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.4.1"
+  }
+}
