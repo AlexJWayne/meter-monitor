@@ -2,7 +2,7 @@ import * as Mongo from "mongodb"
 import { MongoClient, Db } from "mongodb"
 
 const mongo = Mongo.MongoClient
-const url = "mongodb://localhost:27017"
+const url = process.env.MONGODB_URI || "mongodb://localhost:27017"
 
 let db: Mongo.Db
 
