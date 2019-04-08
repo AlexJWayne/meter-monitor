@@ -25,7 +25,7 @@ export default {
     power?: boolean,
   ): Promise<void> {
     // Check if it's still sleeping. if so, don't log any data.
-    const lastEntry = await collection.findOne({}, { sort: { date: 1 } })
+    const lastEntry = await collection.findOne({}, { sort: { date: -1 } })
 
     if (lastEntry && !awake && !lastEntry.awake) return
 
@@ -42,7 +42,7 @@ export default {
   async getEntries() {
     return collection
       .find()
-      .sort({ date: 1 })
+      .sort({ date: -1 })
       .limit(1000)
       .toArray()
   },
