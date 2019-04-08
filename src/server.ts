@@ -5,7 +5,7 @@ import db from "./database"
 const app = express()
 
 app.get("/", async (_req, res) => {
-  const entries = (await db.getEntries()).reverse()
+  const entries = await db.getEntries()
 
   let html = "<table border='1'>"
   html += "<tr>"
