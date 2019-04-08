@@ -9,6 +9,8 @@ let db: Mongo.Db
 export default {
   // Connect to the database
   async connect(): Promise<void> {
+    console.log("connecting to:", url)
+
     const client = await mongo.connect(url)
     db = client.db("meter-monitor")
   },
