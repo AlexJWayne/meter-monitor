@@ -16,15 +16,15 @@ app.get("/", async (_req, res) => {
   html += "<th>LEDs on</th>"
   html += "</tr>"
 
-  for (const entry of entries) {
+  entries.forEach((entry, i) => {
     html += "<tr>"
-    html += `<td>${entry.date.toLocaleString()}</td>`
+    html += `<td>${i == 0 ? "CURRENT" : entry.date.toLocaleString()}</td>`
     html += `<td>${entry.awake ? "YES" : "no"}</td>`
     html += `<td>${entry.batLvl || ""}</td>`
     html += `<td>${entry.slrLvl || ""}</td>`
     html += `<td>${entry.power ? "LEDs ON!" : "off"}</td>`
     html += "</tr>"
-  }
+  })
 
   html += "</table>"
   res.send(html)
