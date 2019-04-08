@@ -22,6 +22,11 @@ export default {
     power?: boolean,
   ): Promise<void> {
     const collection = db.collection("data-points")
+
+    // Check if it's still sleeping. if so, don't log any data.
+    const lastEntry = await collection.findOne({}, { sort: { date: 1 } })
+    if (!awake && !lastEntry.awake) return
+
     collection.insertOne({
       date,
       awake,
@@ -34,6 +39,9 @@ export default {
   // Get all entries
   async getEntries() {
     const collection = db.collection("data-points")
-    return collection.find().toArray()
+    return collection
+      .find()
+      .limit(1000)
+      .toArray()
   },
 }
