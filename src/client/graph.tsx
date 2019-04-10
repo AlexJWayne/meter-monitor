@@ -16,7 +16,7 @@ function formatPoints(pts: Pt[]): string {
 function line(entries: Entry[], key: "batLvl" | "slrLvl"): any {
   const pts: Pt[] = []
 
-  let awake: boolean = false
+  let awake: boolean = true
 
   for (const entry of entries) {
     const msAgo = Date.now() - new Date(entry.date).getTime()
@@ -31,6 +31,7 @@ function line(entries: Entry[], key: "batLvl" | "slrLvl"): any {
     }
 
     if (val <= 0 && awake) {
+      pts.push({ x: pts[pts.length - 1].x, y: height })
       awake = false
     }
 
