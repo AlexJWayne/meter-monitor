@@ -31,7 +31,8 @@ function line(entries: Entry[], key: "batLvl" | "slrLvl"): any {
     }
 
     if (val <= 0 && awake) {
-      pts.push({ x: pts[pts.length - 1].x, y: height })
+      const lastPt = pts[pts.length - 1]
+      if (lastPt) pts.push({ x: lastPt.x, y: height })
       awake = false
     }
 
