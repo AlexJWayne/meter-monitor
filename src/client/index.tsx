@@ -8,13 +8,14 @@ class App extends React.Component<{}, { entries: Entry[] }> {
   constructor(props: {}) {
     super(props)
     this.state = { entries: [] }
+
+    setInterval(() => this.poll(), 60 * 1000)
     this.poll()
   }
 
   async poll() {
     const response = await fetch("/entries")
     this.setState({ entries: await response.json() })
-    setInterval(() => this.poll(), 60 * 1000)
   }
 
   render() {
