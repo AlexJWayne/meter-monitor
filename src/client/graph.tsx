@@ -14,24 +14,27 @@ function formatPoints(pts: Pt[]): string {
 }
 
 function line(entries: Entry[], key: "batLvl" | "slrLvl"): any {
-  let lastEntry: Entry | null
   const pts: Pt[] = []
+
+  let awake: boolean = false
 
   for (const entry of entries) {
     const msAgo = Date.now() - new Date(entry.date).getTime()
+    const x = width - width * (msAgo / DAY)
 
     let val = entry[key] || 0
     val = (height * (val - MIN)) / (MAX - MIN)
 
-    const x = width - width * (msAgo / DAY)
+    if (val > 0 && !awake) {
+      pts.push({ x, y: height })
+      awake = true
+    }
 
-    if (lastEntry && !lastEntry[key] && val) {
-      pts.push({ x, y: 0 })
+    if (val <= 0 && awake) {
+      awake = false
     }
 
     pts.push({ x, y: height - val })
-
-    lastEntry = entry
   }
 
   return <polyline points={formatPoints(pts)} className={key} />
