@@ -28,10 +28,8 @@
     "particle-api-js": "^7.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "sass": "^1.18.0",
     "ts-node": "^8.0.3",
     "typescript": "^3.4.1"
-  },
-  "devDependencies": {
-    "sass": "^1.18.0"
   }
 }

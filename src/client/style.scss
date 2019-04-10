@@ -1,0 +1,23 @@
+body {
+  background: #444;
+  color: #ddd;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.graph {
+  background: #333;
+}
+
+polyline {
+  fill: none;
+  stroke-width: 1px;
+}
+
+.batLvl {
+  stroke: red;
+  stroke-width: 4px;
+}
+
+.slrLvl {
+  stroke: yellow;
+}
