@@ -8,7 +8,7 @@ const MAX = 3100
 const TIME_WIDTH = 24 * 60 * 60 * 1000
 
 const width = 1000
-const height = 500
+const height = 300
 
 function formatPoints(pts: Pt[]): string {
   return pts.map(pt => [pt.x, pt.y].join(",")).join(" ")
