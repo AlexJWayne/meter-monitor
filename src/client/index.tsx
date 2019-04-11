@@ -51,6 +51,7 @@ class App extends React.Component<{}, { entries: Entry[] }> {
           {current && current.power && <li>pattern: {current.pattern}</li>}
           <li>batLvl: {current && current.batLvl}</li>
           <li>slrLvl: {current && current.slrLvl}</li>
+          <li>As of: {current && new Date(current.date).toLocaleString()}</li>
         </ul>
 
         <h2>Today</h2>

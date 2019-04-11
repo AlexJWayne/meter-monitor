@@ -1,8 +1,8 @@
 import * as fs from "fs"
 import * as Particle from "particle-api-js"
-import chalk from "chalk"
 
 import db from "./database"
+import delay from "./delay"
 
 const particle = new Particle()
 let token: string
@@ -28,6 +28,7 @@ async function getVarNumber(
       name,
     })
     results.push(response.body.result)
+    await delay(200)
   }
 
   return Math.round(results.reduce((val, sum) => sum + val, 0) / samples)
