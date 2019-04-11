@@ -6,11 +6,13 @@ body {
 
 .graph {
   background: #333;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
 polyline {
   fill: none;
   stroke-width: 1px;
+  stroke-linejoin: bevel;
 }
 
 .batLvl {
@@ -20,4 +22,25 @@ polyline {
 
 .slrLvl {
   stroke: yellow;
+}
+
+.hour-line {
+  stroke: white;
+  stroke-width: 1px;
+  opacity: 0.1;
+
+  &.midnight {
+    opacity: 0.25;
+    stroke-width: 2px;
+  }
+}
+
+.hour-value {
+  fill: white;
+  opacity: 0.5;
+  font-size: 12px;
+}
+
+.leds-on {
+  fill: #545;
 }

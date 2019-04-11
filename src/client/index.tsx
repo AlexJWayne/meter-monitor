@@ -18,11 +18,34 @@ class App extends React.Component<{}, { entries: Entry[] }> {
     this.setState({ entries: await response.json() })
   }
 
+  entriesForDaysAgo(daysAgo: number): Entry[] {
+    const day = 24 * 60 * 60 * 1000
+    const max = Date.now() - day * daysAgo
+    const min = max - day
+    return this.state.entries
+      .filter(entry => {
+        const timestamp = new Date(entry.date).getTime()
+        return min < timestamp && timestamp < max
+      })
+      .map(entry => ({
+        ...entry,
+        date: new Date(new Date(entry.date).getTime() + day * daysAgo),
+      }))
+  }
+
   render() {
     return (
       <div>
-        <Graph entries={this.state.entries} />
-        <table>
+        <h2>Last 24 hours</h2>
+        <Graph entries={this.entriesForDaysAgo(0)} />
+
+        <h2>24 - 48 hours</h2>
+        <Graph entries={this.entriesForDaysAgo(1)} />
+
+        <h2>48 - 72 hours</h2>
+        <Graph entries={this.entriesForDaysAgo(2)} />
+
+        {/* <table>
           <tbody>
             <tr>
               <th>Date</th>
@@ -41,7 +64,7 @@ class App extends React.Component<{}, { entries: Entry[] }> {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
     )
   }
