@@ -5,6 +5,7 @@ export type Entry = {
   batLvl?: number
   slrLvl?: number
   power?: boolean
+  pattern?: number
 }
 
 export type Pt = {

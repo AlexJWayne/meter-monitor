@@ -40,14 +40,15 @@ class App extends React.Component<{}, { entries: Entry[] }> {
     const current = this.state.entries[0]
     return (
       <div>
-        <h2>Current</h2>
+        <h2>Currently</h2>
         <ul>
           <li>
             {current && current.awake
               ? "Awake: Sculpture has power"
               : "Asleep: battery too low"}
           </li>
-          <li>{current && current.power ? "LEDs ON!" : "LEDs off"}</li>
+          <li>LEDs: {current && current.power ? "ON!" : "off"}</li>
+          {current && current.power && <li>pattern: {current.pattern}</li>}
           <li>batLvl: {current && current.batLvl}</li>
           <li>slrLvl: {current && current.slrLvl}</li>
         </ul>

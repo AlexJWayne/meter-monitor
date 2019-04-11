@@ -16,13 +16,21 @@ async function auth() {
   token = response.body.access_token
 }
 
-async function getVarNumber(name: string): Promise<number> {
-  const response = await particle.getVariable({
-    auth: token,
-    deviceId: process.env.DEVICE_ID,
-    name,
-  })
-  return response.body.result
+async function getVarNumber(
+  name: string,
+  samples: number = 1,
+): Promise<number> {
+  const results: number[] = []
+  for (let i = 0; i < samples; i++) {
+    const response = await particle.getVariable({
+      auth: token,
+      deviceId: process.env.DEVICE_ID,
+      name,
+    })
+    results.push(response.body.result)
+  }
+
+  return Math.round(results.reduce((val, sum) => sum + val, 0) / samples)
 }
 
 async function getVarBool(name: string): Promise<boolean> {
@@ -39,20 +47,15 @@ async function logData() {
 
   let data: string
   try {
-    const batLvl = await getVarNumber("batLvl")
-    const slrLvl = await getVarNumber("slrLvl")
+    const batLvl = await getVarNumber("batLvl", 4)
+    const slrLvl = await getVarNumber("slrLvl", 4)
     const power = await getVarBool("power")
+    const pattern = await getVarNumber("pattern")
 
-    console.log(
-      chalk.gray(date.toLocaleString()),
-      chalk.green(batLvl.toString()),
-      chalk.yellow(slrLvl.toString()),
-      power ? chalk.bgGreen(" LIGHTS ON ") : chalk.gray("off"),
-    )
-    db.logData(date, true, batLvl, slrLvl, power)
+    // Awake
+    db.logData(date, true, batLvl, slrLvl, power, pattern)
   } catch (e) {
     // Asleep
-    console.log(chalk.gray(date.toLocaleString()))
     db.logData(date, false)
   }
 }

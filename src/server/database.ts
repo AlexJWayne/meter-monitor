@@ -1,5 +1,4 @@
 import * as Mongo from "mongodb"
-import { MongoClient, Db } from "mongodb"
 
 const mongo = Mongo.MongoClient
 const url = process.env.MONGODB_URI || "mongodb://localhost:27017"
@@ -22,6 +21,7 @@ export default {
     batLvl?: number,
     slrLvl?: number,
     power?: boolean,
+    pattern?: number,
   ): Promise<void> {
     // Check if it's still sleeping. if so, don't log any data.
     const lastEntry = await collection.findOne({}, { sort: { date: -1 } })
@@ -34,6 +34,7 @@ export default {
       batLvl,
       slrLvl,
       power,
+      pattern,
     })
   },
 
