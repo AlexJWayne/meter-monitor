@@ -1,11 +1,11 @@
 import * as React from "react"
 
 import { Entry, Pt } from "@shared/types"
+import startTime from "./start-time"
 
 const MIN = 2400
 const MAX = 3100
-const GRAPH_HOURS = 24
-const TIME_WIDTH = GRAPH_HOURS * 60 * 60 * 1000
+const TIME_WIDTH = 24 * 60 * 60 * 1000
 
 const width = 1000
 const height = 500
@@ -15,8 +15,8 @@ function formatPoints(pts: Pt[]): string {
 }
 
 function getX(date: Date | string | number): number {
-  const msAgo = Date.now() - new Date(date).getTime()
-  return width - width * (msAgo / TIME_WIDTH)
+  const msAgo = new Date(date).getTime() - startTime().getTime()
+  return width * (msAgo / TIME_WIDTH)
 }
 
 function mapTimes<T>(times: number, fn: (number: number) => T): T[] {
@@ -36,7 +36,9 @@ function GraphLine({
   let awake: boolean = true
 
   for (const entry of entries) {
-    const msAgo = Date.now() - new Date(entry.date).getTime()
+    const start = startTime()
+
+    const msAgo = start.getTime() - new Date(entry.date).getTime()
     const x = getX(entry.date)
 
     let val = entry[name] || 0
@@ -81,18 +83,19 @@ function HorizontalLines() {
 }
 
 function HourLines() {
-  const now = new Date()
-  const sinceHour = now.getMinutes() * 60 * 1000 + now.getSeconds() * 1000
+  const start = startTime()
+
+  const sinceHour = start.getMinutes() * 60 * 1000 + start.getSeconds() * 1000
 
   const hour = 60 * 60 * 1000
   const elements = []
-  for (let i = 0; i < GRAPH_HOURS; i++) {
-    const time = now.getTime() - sinceHour - i * hour
-    const x = getX(time)
+  for (let i = 0; i < 24; i++) {
+    const x = (width * i) / 24
 
-    const hour24 = new Date(time).getHours()
-    let name = hour24.toString()
+    let name = i.toString()
 
+    let hour24 = i + 5
+    if (hour24 > 24) hour24 -= 24
     if (hour24 > 12) name = `${hour24 - 12}p`
     else if (hour24 == 12) name = "12p"
     else if (hour24 == 0) name = "12a"
@@ -105,7 +108,7 @@ function HourLines() {
         y1={0}
         x2={x}
         y2={height}
-        className={`hour-line ${hour24 === 0 ? "midnight" : ""}`}
+        className="hour-line"
       />,
       <text key={`${i}-text`} x={x + 2} y={15} className="hour-value">
         {name}

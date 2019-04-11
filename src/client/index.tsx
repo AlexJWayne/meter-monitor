@@ -3,6 +3,7 @@ import * as ReactDOM from "react-dom"
 
 import { Entry } from "@shared/types"
 import Graph from "./graph"
+import startTime from "./start-time"
 
 class App extends React.Component<{}, { entries: Entry[] }> {
   constructor(props: {}) {
@@ -19,9 +20,11 @@ class App extends React.Component<{}, { entries: Entry[] }> {
   }
 
   entriesForDaysAgo(daysAgo: number): Entry[] {
+    const start = startTime()
+
     const day = 24 * 60 * 60 * 1000
-    const max = Date.now() - day * daysAgo
-    const min = max - day
+    const min = start.getTime() - day * daysAgo
+    const max = min + day
     return this.state.entries
       .filter(entry => {
         const timestamp = new Date(entry.date).getTime()
@@ -34,15 +37,28 @@ class App extends React.Component<{}, { entries: Entry[] }> {
   }
 
   render() {
+    const current = this.state.entries[0]
     return (
       <div>
-        <h2>Last 24 hours</h2>
+        <h2>Current</h2>
+        <ul>
+          <li>
+            {current && current.awake
+              ? "Awake: Sculpture has power"
+              : "Asleep: battery too low"}
+          </li>
+          <li>{current && current.power ? "LEDs ON!" : "LEDs off"}</li>
+          <li>batLvl: {current && current.batLvl}</li>
+          <li>slrLvl: {current && current.slrLvl}</li>
+        </ul>
+
+        <h2>Today</h2>
         <Graph entries={this.entriesForDaysAgo(0)} />
 
-        <h2>24 - 48 hours</h2>
+        <h2>Yesterday</h2>
         <Graph entries={this.entriesForDaysAgo(1)} />
 
-        <h2>48 - 72 hours</h2>
+        <h2>The day before yesterday</h2>
         <Graph entries={this.entriesForDaysAgo(2)} />
 
         {/* <table>

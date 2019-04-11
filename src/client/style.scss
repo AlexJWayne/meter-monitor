@@ -28,11 +28,6 @@ polyline {
   stroke: white;
   stroke-width: 1px;
   opacity: 0.1;
-
-  &.midnight {
-    opacity: 0.25;
-    stroke-width: 2px;
-  }
 }
 
 .hour-value {
