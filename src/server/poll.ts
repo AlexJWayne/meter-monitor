@@ -1,5 +1,4 @@
-import * as fs from "fs"
-import * as Particle from "particle-api-js"
+import Particle from "particle-api-js"
 
 import db from "./database"
 import delay from "./delay"

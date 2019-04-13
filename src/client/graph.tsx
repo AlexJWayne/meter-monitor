@@ -19,11 +19,6 @@ function getX(date: Date | string | number): number {
   return width * (msAgo / TIME_WIDTH)
 }
 
-function mapTimes<T>(times: number, fn: (number: number) => T): T[] {
-  const emptyArray = [...Array(times)]
-  return emptyArray.map((_, i) => fn(i))
-}
-
 function GraphLine({
   entries,
   name,

@@ -5,13 +5,17 @@ import { Entry } from "@shared/types"
 import Graph from "./graph"
 import startTime from "./start-time"
 
-class App extends React.Component<{}, { entries: Entry[] }> {
+class App extends React.Component<{}, { entries: Entry[]; auth: boolean }> {
+  passwordField: React.RefObject<HTMLInputElement>
+
   constructor(props: {}) {
     super(props)
-    this.state = { entries: [] }
+    this.passwordField = React.createRef()
+    this.state = { entries: [], auth: false }
 
     setInterval(() => this.poll(), 60 * 1000)
     this.poll()
+    this.auth()
   }
 
   async poll() {
@@ -36,6 +40,18 @@ class App extends React.Component<{}, { entries: Entry[] }> {
       }))
   }
 
+  async auth(password?: string | null) {
+    const res = await fetch("/auth", {
+      method: "POST",
+      cache: "no-cache",
+      credentials: "same-origin",
+      body: JSON.stringify({ password }),
+      headers: { "Content-Type": "application/json" },
+    })
+    const json = await res.json()
+    this.setState({ auth: json.authorized })
+  }
+
   render() {
     const current = this.state.entries[0]
     return (
@@ -52,6 +68,24 @@ class App extends React.Component<{}, { entries: Entry[] }> {
           <li>batLvl: {current && current.batLvl}</li>
           <li>slrLvl: {current && current.slrLvl}</li>
           <li>As of: {current && new Date(current.date).toLocaleString()}</li>
+          <li>
+            {this.state.auth ? (
+              <em>AUTHORIZED</em>
+            ) : (
+              <React.Fragment>
+                <input
+                  ref={this.passwordField}
+                  type="text"
+                  placeholder="password"
+                />
+                <button
+                  onClick={() => this.auth(this.passwordField.current.value)}
+                >
+                  Login
+                </button>
+              </React.Fragment>
+            )}
+          </li>
         </ul>
 
         <h2>Today</h2>
