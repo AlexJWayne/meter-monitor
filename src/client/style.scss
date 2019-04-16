@@ -39,3 +39,35 @@ polyline {
 .leds-on {
   fill: #545;
 }
+
+.controls {
+  .button {
+    background: #666;
+    color: #aaa;
+    display: inline-block;
+    padding: 20px 30px;
+    margin: 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.1s;
+    user-select: none;
+
+    &:hover {
+      background: #888;
+    }
+
+    &.selected {
+      background: #aaa;
+      color: #666;
+    }
+  }
+}
+
+.loading {
+  .controls {
+    .button {
+      opacity: 0.25;
+    }
+  }
+}

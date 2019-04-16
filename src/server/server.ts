@@ -3,6 +3,8 @@ import bodyParser from "body-parser"
 import cookieSession from "cookie-session"
 
 import db from "./database"
+import { logData } from "./poll"
+import * as particle from "./particle"
 
 const app = express()
 
@@ -26,6 +28,19 @@ app.post("/auth", (req, res) => {
   }
 
   res.json({ authorized: !!req.session.authorized })
+})
+
+app.post("/call", async (req, res) => {
+  if (!req.session.authorized)
+    return res.status(401).json({ error: "Unauthorized" })
+
+  await particle.callFunction(
+    req.body.name,
+    parseInt(req.body.argument, 10) || 0,
+  )
+  await logData()
+
+  return res.json({ success: true })
 })
 
 export default function server() {

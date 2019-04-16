@@ -2,25 +2,71 @@ import * as React from "react"
 import * as ReactDOM from "react-dom"
 
 import { Entry } from "@shared/types"
+import Controls from "./controls"
 import Graph from "./graph"
 import startTime from "./start-time"
 
-class App extends React.Component<{}, { entries: Entry[]; auth: boolean }> {
+type State = {
+  entries: Entry[]
+  auth: boolean
+  loading: boolean
+}
+
+class App extends React.Component<{}, State> {
   passwordField: React.RefObject<HTMLInputElement>
 
   constructor(props: {}) {
     super(props)
     this.passwordField = React.createRef()
-    this.state = { entries: [], auth: false }
 
-    setInterval(() => this.poll(), 60 * 1000)
+    this.state = {
+      entries: [],
+      auth: false,
+      loading: false,
+    }
+
     this.poll()
     this.auth()
   }
 
+  fetch(
+    url: string,
+    options: {
+      method?: "GET" | "POST"
+      jsonBody?: any
+      body?: string
+    } = {},
+  ) {
+    const { jsonBody, ...otherOptions } = options
+
+    const promise = fetch(url, {
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: jsonBody ? JSON.stringify(jsonBody) : options.body,
+      ...otherOptions,
+    })
+
+    return promise
+  }
+
   async poll() {
-    const response = await fetch("/entries")
+    const response = await this.fetch("/entries")
     this.setState({ entries: await response.json() })
+    setTimeout(() => this.poll(), 60 * 1000)
+  }
+
+  async setPower(power: boolean) {
+    if (this.state.loading) return
+
+    const jsonBody = power
+      ? { name: "startPattern", argument: 0 }
+      : { name: "turnOff" }
+
+    this.setState({ loading: true })
+    await this.fetch("/call", { method: "POST", jsonBody })
+    await this.poll()
+    this.setState({ loading: false })
   }
 
   entriesForDaysAgo(daysAgo: number): Entry[] {
@@ -41,12 +87,9 @@ class App extends React.Component<{}, { entries: Entry[]; auth: boolean }> {
   }
 
   async auth(password?: string | null) {
-    const res = await fetch("/auth", {
+    const res = await this.fetch("/auth", {
       method: "POST",
-      cache: "no-cache",
-      credentials: "same-origin",
-      body: JSON.stringify({ password }),
-      headers: { "Content-Type": "application/json" },
+      jsonBody: { password },
     })
     const json = await res.json()
     this.setState({ auth: json.authorized })
@@ -54,8 +97,10 @@ class App extends React.Component<{}, { entries: Entry[]; auth: boolean }> {
 
   render() {
     const current = this.state.entries[0]
+    if (!current) return null
+
     return (
-      <div>
+      <div className={this.state.loading ? "loading" : ""}>
         <h2>Currently</h2>
         <ul>
           <li>
@@ -88,6 +133,14 @@ class App extends React.Component<{}, { entries: Entry[]; auth: boolean }> {
           </li>
         </ul>
 
+        {current.awake && this.state.auth && (
+          <Controls
+            current={current}
+            setPower={power => this.setPower(power)}
+            loading={this.state.loading}
+          />
+        )}
+
         <h2>Today</h2>
         <Graph entries={this.entriesForDaysAgo(0)} />
 
@@ -96,27 +149,6 @@ class App extends React.Component<{}, { entries: Entry[]; auth: boolean }> {
 
         <h2>The day before yesterday</h2>
         <Graph entries={this.entriesForDaysAgo(2)} />
-
-        {/* <table>
-          <tbody>
-            <tr>
-              <th>Date</th>
-              <th>Awake</th>
-              <th>batLvl</th>
-              <th>slrLvl</th>
-              <th>LEDs on</th>
-            </tr>
-            {this.state.entries.map((entry, i) => (
-              <tr key={entry._id}>
-                <td>{new Date(entry.date).toLocaleString()}</td>
-                <td>{entry.awake ? "YES" : "no"}</td>
-                <td>{entry.batLvl || ""}</td>
-                <td>{entry.slrLvl || ""}</td>
-                <td>{entry.power ? "LEDs ON!" : "off"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
       </div>
     )
   }
