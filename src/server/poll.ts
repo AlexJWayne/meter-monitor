@@ -7,10 +7,10 @@ export async function logData(): Promise<void> {
 
   let data: string
   try {
-    const batLvl = await particle.getVarNumber("batLvl", 2)
-    const slrLvl = await particle.getVarNumber("slrLvl", 2)
-    const power = await particle.getVarBool("power")
-    const pattern = await particle.getVarNumber("pattern")
+    const batLvl = (await particle.getVar("batLvl")) as number
+    const slrLvl = (await particle.getVar("slrLvl")) as number
+    const power = (await particle.getVar("power")) as boolean
+    const pattern = (await particle.getVar("pattern")) as number
 
     // Awake
     await db.logData(date, true, batLvl, slrLvl, power, pattern)

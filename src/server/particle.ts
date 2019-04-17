@@ -13,24 +13,8 @@ export async function auth() {
   token = response.body.access_token
 }
 
-export async function getVarNumber(
-  name: string,
-  samples: number = 1,
-): Promise<number> {
+export async function getVar(name: string): Promise<number | boolean> {
   const results: number[] = []
-  for (let i = 0; i < samples; i++) {
-    const response = await particle.getVariable({
-      auth: token,
-      deviceId: process.env.DEVICE_ID,
-      name,
-    })
-    results.push(response.body.result)
-  }
-
-  return Math.round(results.reduce((val, sum) => sum + val, 0) / samples)
-}
-
-export async function getVarBool(name: string): Promise<boolean> {
   const response = await particle.getVariable({
     auth: token,
     deviceId: process.env.DEVICE_ID,
@@ -47,7 +31,7 @@ export async function callFunction(
     auth: token,
     deviceId: process.env.DEVICE_ID,
     name,
-    argument,
+    argument: argument.toString(),
   })
   return response.body.return_value
 }

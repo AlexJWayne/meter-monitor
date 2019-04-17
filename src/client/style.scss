@@ -40,34 +40,50 @@ polyline {
   fill: #545;
 }
 
-.controls {
-  .button {
-    background: #666;
-    color: #aaa;
-    display: inline-block;
-    padding: 20px 30px;
-    margin: 10px;
-    font-size: 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.1s;
-    user-select: none;
+.button {
+  background: #666;
+  color: #aaa;
+  display: inline-block;
+  padding: 20px 30px;
+  margin: 10px;
+  font-size: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  user-select: none;
 
-    &:hover {
-      background: #888;
-    }
+  &:hover {
+    background: #888;
+  }
 
-    &.selected {
-      background: #aaa;
-      color: #666;
-    }
+  &.selected {
+    background: #aaa;
+    color: #666;
+  }
+
+  &.bat,
+  &.slr {
+    font-weight: bold;
+    width: 110px;
+    text-align: center;
+    color: black;
+  }
+
+  &.bat {
+    background: red;
+  }
+
+  &.slr {
+    background: yellow;
   }
 }
 
 .loading {
-  .controls {
-    .button {
-      opacity: 0.25;
-    }
+  .button {
+    opacity: 0.25;
   }
+}
+
+.login {
+  margin: 100px 10px;
 }

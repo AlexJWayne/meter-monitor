@@ -34,13 +34,15 @@ app.post("/call", async (req, res) => {
   if (!req.session.authorized)
     return res.status(401).json({ error: "Unauthorized" })
 
-  await particle.callFunction(
-    req.body.name,
-    parseInt(req.body.argument, 10) || 0,
-  )
+  await particle.callFunction(req.body.name, req.body.argument)
   await logData()
 
   return res.json({ success: true })
+})
+
+app.get("/var", async (req, res) => {
+  const value = await particle.getVar(req.query.name)
+  return res.json({ value })
 })
 
 export default function server() {
