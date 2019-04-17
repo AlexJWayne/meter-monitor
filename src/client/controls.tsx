@@ -38,18 +38,20 @@ export default function Controls({
         </div>
       </div>
       <div>
-        {_.times(numPatterns, i => (
-          <div
-            key={i}
-            className={
-              "button " +
-              (current.power && current.pattern == i ? "selected" : "")
-            }
-            onClick={() => setPattern(i)}
-          >
-            {i}
-          </div>
-        ))}
+        {numPatterns === 0 && <div className="button"> &hellip; </div>}
+        {numPatterns > 0 &&
+          _.times(numPatterns, i => (
+            <div
+              key={i}
+              className={
+                "button " +
+                (current.power && current.pattern == i ? "selected" : "")
+              }
+              onClick={() => setPattern(i)}
+            >
+              {i}
+            </div>
+          ))}
       </div>
     </div>
   )
