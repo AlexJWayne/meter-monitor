@@ -31,7 +31,7 @@ export async function callFunction(
     auth: token,
     deviceId: process.env.DEVICE_ID,
     name,
-    argument: argument.toString(),
+    argument: typeof argument === "number" ? argument.toString() : argument,
   })
   return response.body.return_value
 }

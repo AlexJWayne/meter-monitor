@@ -42,6 +42,7 @@ function App() {
 
   // Set LED power status.
   async function setPower(power: boolean) {
+    if (!auth) return
     if (power) {
       setPattern(0) // turn on
     } else {
@@ -52,6 +53,7 @@ function App() {
 
   // Set current pattern. Also will turn on LEDs of off.
   async function setPattern(patternIdx: number) {
+    if (!auth) return
     await call("startPattern", {
       argument: patternIdx,
       loading,
@@ -74,7 +76,7 @@ function App() {
         </li>
       </ul>
 
-      {current.awake && auth && (
+      {current.awake && (
         <Controls
           current={current}
           setPower={setPower}
