@@ -23,5 +23,5 @@ export async function logData(): Promise<void> {
 export default async function poll() {
   await particle.auth()
   logData()
-  setInterval(logData, 5 * 60 * 1000)
+  setInterval(logData, 10 * 60 * 1000)
 }
