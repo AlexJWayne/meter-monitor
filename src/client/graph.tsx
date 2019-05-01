@@ -115,7 +115,7 @@ function HourLines() {
 }
 
 function LEDsOn({ entries }: { entries: Entry[] }) {
-  const sliceWidth = ((6 * 60 * 1000) / TIME_WIDTH) * width
+  const sliceWidth = ((11 * 60 * 1000) / TIME_WIDTH) * width
   return (
     <g>
       {entries.map(entry =>
